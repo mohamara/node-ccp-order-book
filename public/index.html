@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>matching WebSocket Example</title>
+    <style>
+        #output {
+            width: 100%;
+            height: 90vh;
+        }
+    </style>
+</head>
+
+<body>
+    <input type="text" id="input" placeholder="Enter a command">
+    <button id="sendBtn">Send</button>
+    <br>
+    <textarea id="output" readonly></textarea>
+
+    <script>
+        const ws = new WebSocket('ws://localhost:2525')
+        const input = document.getElementById('input')
+        const sendBtn = document.getElementById('sendBtn')
+        const output = document.getElementById('output')
+
+        ws.addEventListener('open', () => {
+            console.log('Connected to WebSocket server')
+            // ws.send('uci')
+        })
+
+        ws.addEventListener('message', (event) => {
+            console.log('Received data:', event.data)
+            output.value += event.data + '\n'
+            output.scrollTop = output.scrollHeight
+        })
+
+        ws.addEventListener('close', () => {
+            console.log('Disconnected from WebSocket server')
+        })
+
+        sendBtn.addEventListener('click', () => {
+            const command = input.value.trim()
+            if (command) {
+                ws.send(command)
+                input.value = ''
+            }
+        })
+
+        input.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                sendBtn.click()
+            }
+        });
+    </script>
+</body>
+
+</html>

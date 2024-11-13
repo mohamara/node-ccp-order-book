@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - 2525:2525
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm start
